@@ -1,0 +1,1171 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://user_iptvpro:vSZWOxVtTu6jCczh@144.76.224.47:7999/xtream_iptvpro"
+}
+
+model access_output {
+  access_output_id Int    @id @default(autoincrement())
+  output_name      String @db.VarChar(255)
+  output_key       String @db.VarChar(255)
+  output_ext       String @db.VarChar(255)
+
+  @@index([output_ext], map: "output_ext")
+  @@index([output_key], map: "output_key")
+}
+
+model admin_settings {
+  type  String @id @default("") @db.VarChar(128)
+  value String @default("") @db.VarChar(4096)
+}
+
+model blocked_ips {
+  id               Int    @id @default(autoincrement())
+  ip               String @unique(map: "ip_2") @db.VarChar(39)
+  notes            String @db.MediumText
+  date             Int
+  attempts_blocked Int
+
+  @@index([date], map: "date")
+  @@index([ip], map: "ip")
+}
+
+model blocked_user_agents {
+  id               Int    @id @default(autoincrement())
+  user_agent       String @db.VarChar(255)
+  exact_match      Int    @default(0)
+  attempts_blocked Int    @default(0)
+
+  @@index([exact_match], map: "exact_match")
+  @@index([user_agent], map: "user_agent")
+}
+
+model bouquets {
+  id               Int    @id @default(autoincrement())
+  bouquet_name     String @db.MediumText
+  bouquet_channels String @db.MediumText
+  bouquet_series   String @db.MediumText
+  bouquet_order    Int    @default(0)
+}
+
+model client_logs {
+  id            Int    @id @default(autoincrement())
+  stream_id     Int?
+  user_id       Int?
+  client_status String @db.VarChar(255)
+  query_string  String @db.MediumText
+  user_agent    String @db.VarChar(255)
+  ip            String @db.VarChar(255)
+  extra_data    String @db.MediumText
+  date          Int
+
+  @@index([stream_id], map: "stream_id")
+  @@index([user_id], map: "user_id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model created {
+  id                       Int @db.TinyInt
+  type                     Int @db.TinyInt
+  category_id              Int @db.TinyInt
+  stream_display_name      Int @db.TinyInt
+  stream_source            Int @db.TinyInt
+  stream_icon              Int @db.TinyInt
+  notes                    Int @db.TinyInt
+  created_channel_location Int @db.TinyInt
+  enable_transcode         Int @db.TinyInt
+  transcode_attributes     Int @db.TinyInt
+  custom_ffmpeg            Int @db.TinyInt
+  movie_propeties          Int @db.TinyInt
+  movie_subtitles          Int @db.TinyInt
+  read_native              Int @db.TinyInt
+  target_container         Int @db.TinyInt
+  stream_all               Int @db.TinyInt
+  remove_subtitles         Int @db.TinyInt
+  custom_sid               Int @db.TinyInt
+  epg_id                   Int @db.TinyInt
+  channel_id               Int @db.TinyInt
+  epg_lang                 Int @db.TinyInt
+  order                    Int @db.TinyInt
+  auto_restart             Int @db.TinyInt
+  transcode_profile_id     Int @db.TinyInt
+  pids_create_channel      Int @db.TinyInt
+  cchannel_rsources        Int @db.TinyInt
+  gen_timestamps           Int @db.TinyInt
+  added                    Int @db.TinyInt
+  series_no                Int @db.TinyInt
+  direct_source            Int @db.TinyInt
+  tv_archive_duration      Int @db.TinyInt
+  tv_archive_server_id     Int @db.TinyInt
+  tv_archive_pid           Int @db.TinyInt
+  movie_symlink            Int @db.TinyInt
+  redirect_stream          Int @db.TinyInt
+  rtmp_output              Int @db.TinyInt
+  number                   Int @db.TinyInt
+  allow_record             Int @db.TinyInt
+  probesize_ondemand       Int @db.TinyInt
+  custom_map               Int @db.TinyInt
+  external_push            Int @db.TinyInt
+  delay_minutes            Int @db.TinyInt
+
+  @@ignore
+}
+
+model credits_log {
+  id        Int    @id @default(autoincrement())
+  target_id Int
+  admin_id  Int
+  amount    Float  @db.Float
+  date      Int
+  reason    String @db.Text
+
+  @@index([admin_id], map: "admin_id")
+  @@index([target_id], map: "target_id")
+}
+
+model cronjobs {
+  id            Int    @id @default(autoincrement())
+  description   String @db.MediumText
+  filename      String @db.VarChar(255)
+  run_per_mins  Int    @default(1)
+  run_per_hours Int    @default(0)
+  enabled       Int    @default(0)
+  pid           Int    @default(0)
+  timestamp     Int?
+
+  @@index([enabled], map: "enabled")
+  @@index([filename], map: "filename")
+}
+
+model dashboard_statistics {
+  id    Int    @id @default(autoincrement())
+  type  String @default("") @db.VarChar(16)
+  time  Int    @default(0)
+  count Int    @default(0)
+}
+
+model devices {
+  device_id       Int     @id @default(autoincrement())
+  device_name     String  @db.VarChar(255)
+  device_key      String  @db.VarChar(255)
+  device_filename String  @db.VarChar(255)
+  device_header   String  @db.MediumText
+  device_conf     String  @db.MediumText
+  device_footer   String  @db.MediumText
+  default_output  Int     @default(0)
+  copy_text       String? @db.MediumText
+
+  @@index([default_output], map: "default_output")
+  @@index([device_key], map: "device_key")
+}
+
+model enigma2_actions {
+  id        Int    @id @default(autoincrement())
+  device_id Int
+  type      String @db.Text
+  key       String @db.Text
+  command   String @db.Text
+  command2  String @db.Text
+}
+
+model enigma2_devices {
+  device_id        Int    @id @default(autoincrement())
+  mac              String @db.VarChar(255)
+  user_id          Int
+  modem_mac        String @db.VarChar(255)
+  local_ip         String @db.VarChar(255)
+  public_ip        String @db.VarChar(255)
+  key_auth         String @db.VarChar(255)
+  enigma_version   String @db.VarChar(255)
+  cpu              String @db.VarChar(255)
+  version          String @db.VarChar(255)
+  lversion         String @db.Text
+  token            String @db.VarChar(32)
+  last_updated     Int
+  watchdog_timeout Int
+  lock_device      Int    @default(0) @db.TinyInt
+  telnet_enable    Int    @default(1) @db.TinyInt
+  ftp_enable       Int    @default(1) @db.TinyInt
+  ssh_enable       Int    @default(1) @db.TinyInt
+  dns              String @db.VarChar(255)
+  original_mac     String @db.VarChar(255)
+  rc               Int    @default(1) @db.TinyInt
+
+  @@index([mac], map: "mac")
+  @@index([user_id], map: "user_id")
+}
+
+model enigma2_failed {
+  id           Int    @id @default(autoincrement())
+  original_mac String @db.VarChar(255)
+  virtual_mac  String @db.VarChar(255)
+  date         Int
+
+  @@index([original_mac], map: "original_mac")
+}
+
+model epg {
+  id           Int     @id @default(autoincrement())
+  epg_name     String  @db.VarChar(255)
+  epg_file     String  @db.VarChar(300)
+  integrity    String? @db.VarChar(255)
+  last_updated Int?
+  days_keep    Int     @default(7)
+  data         String  @db.LongText
+}
+
+model epg_data {
+  id          Int      @id @default(autoincrement())
+  epg_id      Int
+  title       String   @db.VarChar(255)
+  lang        String   @db.VarChar(10)
+  start       DateTime @default(now()) @db.Timestamp(0)
+  end         DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
+  description String   @db.MediumText
+  channel_id  String   @db.VarChar(50)
+
+  @@index([channel_id], map: "channel_id")
+  @@index([end], map: "end")
+  @@index([epg_id], map: "epg_id")
+  @@index([lang], map: "lang")
+  @@index([start], map: "start")
+}
+
+model isp_addon {
+  id      Int    @id @default(autoincrement())
+  isp     String @db.Text
+  blocked Int    @default(0) @db.TinyInt
+}
+
+model licence {
+  id                 Int    @id @default(autoincrement())
+  licence_key        String @db.VarChar(29)
+  show_message       Int    @db.TinyInt
+  update_available   Int    @default(0)
+  reshare_deny_addon Int?   @default(0) @db.TinyInt
+}
+
+model login_flood {
+  id        Int      @id @default(autoincrement())
+  username  String   @default("") @db.VarChar(128)
+  ip        String   @default("") @db.VarChar(64)
+  dateadded DateTime @default(now()) @db.Timestamp(0)
+}
+
+model login_logs {
+  id       Int    @id @default(autoincrement())
+  user_id  Int?
+  data     String @db.MediumText
+  login_ip String @db.VarChar(255)
+  date     Int
+
+  @@index([user_id], map: "user_id")
+}
+
+model login_users {
+  id       Int    @id @default(autoincrement())
+  owner    Int
+  date     Int
+  login_ip String @db.VarChar(255)
+  type     String @db.VarChar(255)
+}
+
+model mag_claims {
+  id        Int      @id @default(autoincrement())
+  mag_id    Int
+  stream_id Int
+  real_type String   @db.VarChar(10)
+  date      DateTime @db.DateTime(0)
+
+  @@index([date], map: "date")
+  @@index([mag_id], map: "mag_id")
+  @@index([real_type], map: "real_type")
+  @@index([stream_id], map: "stream_id")
+}
+
+model mag_devices {
+  mag_id                     Int     @id @default(autoincrement())
+  user_id                    Int
+  bright                     Int     @default(200)
+  contrast                   Int     @default(127)
+  saturation                 Int     @default(127)
+  aspect                     String  @db.MediumText
+  video_out                  String  @default("rca") @db.VarChar(20)
+  volume                     Int     @default(50)
+  playback_buffer_bytes      Int     @default(0)
+  playback_buffer_size       Int     @default(0)
+  audio_out                  Int     @default(1)
+  mac                        String  @db.VarChar(50)
+  ip                         String? @db.VarChar(20)
+  ls                         String? @db.VarChar(20)
+  ver                        String? @db.VarChar(300)
+  lang                       String? @db.VarChar(50)
+  locale                     String  @default("en_GB.utf8") @db.VarChar(30)
+  city_id                    Int?    @default(0)
+  hd                         Int     @default(1)
+  main_notify                Int     @default(1)
+  fav_itv_on                 Int     @default(0)
+  now_playing_start          Int?
+  now_playing_type           Int     @default(0)
+  now_playing_content        String? @db.VarChar(50)
+  time_last_play_tv          Int?
+  time_last_play_video       Int?
+  hd_content                 Int     @default(1)
+  image_version              String? @db.VarChar(350)
+  last_change_status         Int?
+  last_start                 Int?
+  last_active                Int?
+  keep_alive                 Int?
+  playback_limit             Int     @default(3)
+  screensaver_delay          Int     @default(10)
+  stb_type                   String  @db.VarChar(20)
+  sn                         String? @db.VarChar(255)
+  last_watchdog              Int?
+  created                    Int
+  country                    String? @db.VarChar(5)
+  plasma_saving              Int     @default(0)
+  ts_enabled                 Int?    @default(0)
+  ts_enable_icon             Int     @default(1)
+  ts_path                    String? @db.VarChar(35)
+  ts_max_length              Int     @default(3600)
+  ts_buffer_use              String  @default("cyclic") @db.VarChar(15)
+  ts_action_on_exit          String  @default("no_save") @db.VarChar(20)
+  ts_delay                   String  @default("on_pause") @db.VarChar(20)
+  video_clock                String  @default("Off") @db.VarChar(10)
+  rtsp_type                  Int     @default(4)
+  rtsp_flags                 Int     @default(0)
+  stb_lang                   String  @default("en") @db.VarChar(15)
+  display_menu_after_loading Int     @default(1)
+  record_max_length          Int     @default(180)
+  plasma_saving_timeout      Int     @default(600)
+  now_playing_link_id        Int?
+  now_playing_streamer_id    Int?
+  device_id                  String? @db.VarChar(255)
+  device_id2                 String? @db.VarChar(255)
+  hw_version                 String? @db.VarChar(255)
+  parent_password            String  @default("0000") @db.VarChar(20)
+  spdif_mode                 Int     @default(1)
+  show_after_loading         String  @default("main_menu") @db.VarChar(60)
+  play_in_preview_by_ok      Int     @default(1)
+  hdmi_event_reaction        Int     @default(1)
+  mag_player                 String? @default("ffmpeg") @db.VarChar(20)
+  play_in_preview_only_by_ok String  @default("true") @db.VarChar(10)
+  watchdog_timeout           Int
+  fav_channels               String  @db.MediumText
+  tv_archive_continued       String  @db.MediumText
+  tv_channel_default_aspect  String  @default("fit") @db.VarChar(255)
+  last_itv_id                Int     @default(0)
+  units                      String? @default("metric") @db.VarChar(20)
+  token                      String? @default("") @db.VarChar(32)
+  lock_device                Int     @default(0) @db.TinyInt
+
+  @@index([mac], map: "mac")
+  @@index([user_id], map: "user_id")
+}
+
+model mag_events {
+  id                     Int    @id @default(autoincrement())
+  status                 Int    @default(0) @db.TinyInt
+  mag_device_id          Int
+  event                  String @db.VarChar(20)
+  need_confirm           Int    @default(0) @db.TinyInt
+  msg                    String @db.MediumText
+  reboot_after_ok        Int    @default(0) @db.TinyInt
+  auto_hide_timeout      Int?   @default(0) @db.TinyInt
+  send_time              Int
+  additional_services_on Int    @default(1) @db.TinyInt
+  anec                   Int    @default(0) @db.TinyInt
+  vclub                  Int    @default(0) @db.TinyInt
+
+  @@index([event], map: "event")
+  @@index([mag_device_id], map: "mag_device_id")
+  @@index([status], map: "status")
+}
+
+model mag_logs {
+  id     Int    @id @default(autoincrement())
+  mag_id Int?
+  action String @db.VarChar(255)
+
+  @@index([mag_id], map: "mag_id")
+}
+
+model member_groups {
+  group_id                        Int    @id @default(autoincrement())
+  group_name                      String @db.MediumText
+  group_color                     String @default("#000000") @db.VarChar(7)
+  is_banned                       Int    @default(0) @db.TinyInt
+  is_admin                        Int    @default(0) @db.TinyInt
+  is_reseller                     Int    @db.TinyInt
+  total_allowed_gen_trials        Int    @default(0)
+  total_allowed_gen_in            String @db.VarChar(255)
+  delete_users                    Int    @default(0) @db.TinyInt
+  allowed_pages                   String @db.Text
+  can_delete                      Int    @default(1) @db.TinyInt
+  reseller_force_server           Int    @default(0) @db.TinyInt
+  create_sub_resellers_price      Float  @default(0) @db.Float
+  create_sub_resellers            Int    @default(0) @db.TinyInt
+  alter_packages_ids              Int    @default(0) @db.TinyInt
+  alter_packages_prices           Int    @default(0) @db.TinyInt
+  reseller_client_connection_logs Int    @default(0) @db.TinyInt
+  reseller_assign_pass            Int    @default(0) @db.TinyInt
+  allow_change_pass               Int    @default(0) @db.TinyInt
+  allow_import                    Int    @default(0) @db.TinyInt
+  allow_export                    Int    @default(0) @db.TinyInt
+  reseller_trial_credit_allow     Int    @default(0)
+  edit_mac                        Int    @default(0) @db.TinyInt
+  edit_isplock                    Int    @default(0) @db.TinyInt
+  reset_stb_data                  Int    @default(0) @db.TinyInt
+  reseller_bonus_package_inc      Int    @default(0) @db.TinyInt
+  allow_download                  Int    @default(1) @db.TinyInt
+  minimum_trial_credits           Int    @default(0)
+  reseller_can_select_bouquets    Int    @default(0)
+
+  @@index([can_delete], map: "can_delete")
+  @@index([is_admin], map: "is_admin")
+  @@index([is_banned], map: "is_banned")
+  @@index([is_reseller], map: "is_reseller")
+}
+
+model movie_containers {
+  container_id        Int    @id @default(autoincrement())
+  container_extension String @db.VarChar(255)
+  container_header    String @db.VarChar(255)
+
+  @@index([container_extension], map: "container_extension")
+}
+
+model packages {
+  id                   Int    @id @default(autoincrement())
+  package_name         String @db.VarChar(255)
+  is_trial             Int    @db.TinyInt
+  is_official          Int    @db.TinyInt
+  trial_credits        Float  @db.Float
+  official_credits     Float  @db.Float
+  trial_duration       Int
+  trial_duration_in    String @db.VarChar(255)
+  official_duration    Int
+  official_duration_in String @db.VarChar(255)
+  groups               String @db.MediumText
+  bouquets             String @db.MediumText
+  can_gen_mag          Int    @default(0) @db.TinyInt
+  only_mag             Int    @default(0) @db.TinyInt
+  output_formats       String @db.MediumText
+  is_isplock           Int    @default(0) @db.TinyInt
+  max_connections      Int    @default(1)
+  is_restreamer        Int    @default(0) @db.TinyInt
+  force_server_id      Int    @default(0)
+  can_gen_e2           Int    @default(0) @db.TinyInt
+  only_e2              Int    @default(0) @db.TinyInt
+  forced_country       String @db.VarChar(2)
+  lock_device          Int    @default(0) @db.TinyInt
+
+  @@index([can_gen_e2], map: "can_gen_e2")
+  @@index([can_gen_mag], map: "can_gen_mag")
+  @@index([is_official], map: "is_official")
+  @@index([is_trial], map: "is_trial")
+  @@index([only_e2], map: "only_e2")
+  @@index([only_mag], map: "only_mag")
+}
+
+model panel_logs {
+  id          Int    @id @default(autoincrement())
+  log_message String @db.LongText
+  date        Int
+}
+
+model reg_userlog {
+  id       Int    @id @default(autoincrement())
+  owner    Int
+  username String @db.MediumText
+  password String @db.MediumText
+  date     Int
+  type     String @db.VarChar(255)
+}
+
+model reg_users {
+  id                Int     @id @default(autoincrement())
+  username          String  @db.VarChar(50)
+  password          String  @db.VarChar(255)
+  email             String  @db.VarChar(255)
+  ip                String? @db.VarChar(255)
+  date_registered   Int
+  verify_key        String? @db.MediumText
+  last_login        Int?
+  member_group_id   Int
+  verified          Int     @default(0)
+  credits           Float   @default(0) @db.Float
+  notes             String? @db.MediumText
+  status            Int     @default(1) @db.TinyInt
+  default_lang      String  @db.MediumText
+  reseller_dns      String  @db.Text
+  owner_id          Int     @default(0)
+  override_packages String? @db.Text
+  google_2fa_sec    String  @db.VarChar(50)
+  dark_mode         Int     @default(0)
+  sidebar           Int     @default(0)
+  expanded_sidebar  Int     @default(0)
+
+  @@index([member_group_id], map: "member_group_id")
+  @@index([password], map: "password")
+  @@index([username], map: "username")
+}
+
+model reseller_imex {
+  id          Int    @id @default(autoincrement())
+  reg_id      Int
+  header      String @db.LongText
+  data        String @db.LongText
+  accepted    Int    @default(0) @db.TinyInt
+  finished    Int    @default(0) @db.TinyInt
+  bouquet_ids String @db.Text
+
+  @@index([reg_id], map: "reg_id")
+}
+
+model rtmp_ips {
+  id    Int    @id @default(autoincrement())
+  ip    String @unique(map: "ip") @db.VarChar(255)
+  notes String @db.Text
+}
+
+model series {
+  id               Int    @id @default(autoincrement())
+  title            String @db.VarChar(255)
+  category_id      Int?
+  cover            String @db.VarChar(255)
+  cover_big        String @db.VarChar(255)
+  genre            String @db.VarChar(255)
+  plot             String @db.Text
+  cast             String @db.Text
+  rating           Int
+  director         String @db.VarChar(255)
+  releaseDate      String @db.VarChar(255)
+  last_modified    Int
+  tmdb_id          Int
+  seasons          String @db.MediumText
+  episode_run_time Int    @default(0)
+  backdrop_path    String @db.Text
+  youtube_trailer  String @db.Text
+
+  @@index([last_modified], map: "last_modified")
+  @@index([tmdb_id], map: "tmdb_id")
+}
+
+model series_episodes {
+  id         Int @id @default(autoincrement())
+  season_num Int
+  series_id  Int
+  stream_id  Int
+  sort       Int
+
+  @@index([season_num], map: "season_num")
+  @@index([series_id], map: "series_id")
+  @@index([sort], map: "sort")
+  @@index([stream_id], map: "stream_id")
+}
+
+model server_activity {
+  id               Int  @id @default(autoincrement())
+  source_server_id Int
+  dest_server_id   Int
+  stream_id        Int
+  pid              Int?
+  bandwidth        Int  @default(0)
+  date_start       Int
+  date_end         Int?
+
+  @@index([date_end], map: "date_end")
+  @@index([dest_server_id], map: "dest_server_id")
+  @@index([pid], map: "pid")
+  @@index([source_server_id], map: "source_server_id")
+  @@index([stream_id], map: "stream_id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model settings {
+  id                                    Int
+  bouquet_name                          String  @db.MediumText
+  live_streaming_pass                   String  @db.MediumText
+  email_verify_sub                      String  @db.MediumText
+  email_verify_cont                     String  @db.MediumText
+  email_forgot_sub                      String  @db.MediumText
+  email_forgot_cont                     String  @db.MediumText
+  mail_from                             String  @db.MediumText
+  smtp_host                             String  @db.MediumText
+  smtp_port                             Int
+  min_password                          Int     @default(5)
+  username_strlen                       Int     @default(15)
+  username_alpha                        Int     @default(1)
+  allow_multiple_accs                   Int     @default(0)
+  allow_registrations                   Int     @default(0)
+  server_name                           String  @db.MediumText
+  smtp_username                         String  @db.MediumText
+  smtp_password                         String  @db.MediumText
+  email_new_pass_sub                    String  @db.MediumText
+  logo_url                              String  @db.MediumText
+  email_new_pass_cont                   String  @db.MediumText
+  smtp_from_name                        String  @db.MediumText
+  confirmation_email                    Int
+  smtp_encryption                       String  @db.MediumText
+  unique_id                             String  @db.MediumText
+  copyrights_removed                    Int     @db.TinyInt
+  copyrights_text                       String  @db.MediumText
+  default_timezone                      String  @default("Europe/Athens") @db.VarChar(255)
+  default_locale                        String  @default("en_GB.utf8") @db.VarChar(20)
+  allowed_stb_types                     String  @db.Text
+  client_prebuffer                      Int
+  split_clients                         String  @db.VarChar(255)
+  stream_max_analyze                    Int     @default(30)
+  show_not_on_air_video                 Int     @db.TinyInt
+  not_on_air_video_path                 String  @db.MediumText
+  show_banned_video                     Int     @db.TinyInt
+  banned_video_path                     String  @db.MediumText
+  show_expired_video                    Int     @db.TinyInt
+  expired_video_path                    String  @db.MediumText
+  mag_container                         String  @db.VarChar(255)
+  probesize                             Int     @default(5000000)
+  allowed_ips_admin                     String  @db.MediumText
+  block_svp                             Int     @default(0) @db.TinyInt
+  allow_countries                       String  @db.MediumText
+  user_auto_kick_hours                  Int     @default(0)
+  show_in_red_online                    Int     @default(0)
+  disallow_empty_user_agents            Int?    @default(0) @db.TinyInt
+  show_all_category_mag                 Int     @default(1) @db.TinyInt
+  default_lang                          String? @db.MediumText
+  autobackup_status                     Int     @default(0)
+  autobackup_pass                       String  @db.MediumText
+  flood_limit                           Int     @default(0)
+  flood_ips_exclude                     String  @db.MediumText
+  reshare_deny_addon                    Int     @default(0) @db.TinyInt
+  restart_http                          Int     @default(0) @db.TinyInt
+  css_layout                            String  @db.VarChar(255)
+  flood_seconds                         Int     @default(5)
+  flood_max_attempts                    Int     @default(1)
+  flood_apply_clients                   Int     @default(1)
+  flood_apply_restreamers               Int     @default(0)
+  backup_source_all                     Int     @default(0)
+  flood_get_block                       Int     @default(0)
+  portal_block                          Int     @default(0)
+  streaming_block                       Int     @default(0)
+  stream_start_delay                    Int     @default(20000)
+  hash_lb                               Int     @default(1) @db.TinyInt
+  vod_bitrate_plus                      Int     @default(60)
+  read_buffer_size                      Int     @default(8192)
+  tv_channel_default_aspect             String  @default("fit") @db.VarChar(255)
+  playback_limit                        Int     @default(3)
+  show_tv_channel_logo                  Int     @default(1) @db.TinyInt
+  show_channel_logo_in_preview          Int     @default(1) @db.TinyInt
+  enable_connection_problem_indication  Int     @default(1) @db.TinyInt
+  enable_pseudo_hls                     Int     @default(1) @db.TinyInt
+  vod_limit_at                          Int     @default(0)
+  client_area_plugin                    String  @default("flow") @db.VarChar(255)
+  persistent_connections                Int     @default(0) @db.TinyInt
+  record_max_length                     Int     @default(180)
+  total_records_length                  Int     @default(600)
+  max_local_recordings                  Int     @default(10)
+  allowed_stb_types_for_local_recording String  @db.Text
+  allowed_stb_types_rec                 String  @db.Text
+  show_captcha                          Int     @default(1)
+  dynamic_timezone                      Int     @default(1) @db.TinyInt
+  stalker_theme                         String  @default("digital") @db.VarChar(255)
+  rtmp_random                           Int     @default(1) @db.TinyInt
+  api_ips                               String  @db.Text
+  crypt_load_balancing                  String  @default("") @db.VarChar(255)
+  use_buffer                            Int     @default(0) @db.TinyInt
+  restreamer_prebuffer                  Int     @default(0) @db.TinyInt
+  audio_restart_loss                    Int     @default(0) @db.TinyInt
+  stalker_lock_images                   String  @db.MediumText
+  channel_number_type                   String  @default("bouquet") @db.VarChar(25)
+  stb_change_pass                       Int     @default(0) @db.TinyInt
+  enable_debug_stalker                  Int     @default(0) @db.TinyInt
+  online_capacity_interval              Int     @default(10) @db.SmallInt
+  always_enabled_subtitles              Int     @default(1) @db.TinyInt
+  test_download_url                     String  @default("") @db.VarChar(255)
+  xc_support_allow                      Int     @default(1) @db.TinyInt
+  e2_arm7a                              String  @default("") @db.VarChar(255)
+  e2_mipsel                             String  @default("") @db.VarChar(255)
+  e2_mips32el                           String  @default("") @db.VarChar(255)
+  e2_sh4                                String  @default("") @db.VarChar(255)
+  e2_arm                                String  @default("") @db.VarChar(255)
+  api_pass                              String  @db.VarChar(255)
+  message_of_day                        String  @db.Text
+  double_auth                           Int     @default(0) @db.TinyInt
+  mysql_remote_sec                      Int     @default(0) @db.TinyInt
+  enable_isp_lock                       Int     @default(0) @db.TinyInt
+  show_isps                             Int     @default(1) @db.TinyInt
+  userpanel_mainpage                    String  @db.LongText
+  save_closed_connection                Int     @default(1) @db.TinyInt
+  client_logs_save                      Int     @default(1) @db.TinyInt
+  get_real_ip_client                    String  @db.VarChar(255)
+  case_sensitive_line                   Int     @default(1) @db.TinyInt
+  county_override_1st                   Int     @default(0) @db.TinyInt
+  disallow_2nd_ip_con                   Int     @default(0) @db.TinyInt
+  firewall                              Int     @default(0) @db.TinyInt
+  new_sorting_bouquet                   Int     @default(1) @db.TinyInt
+  split_by                              String  @default("con") @db.VarChar(255)
+  use_mdomain_in_lists                  Int     @default(0) @db.TinyInt
+  use_https                             String  @db.Text
+  priority_backup                       Int     @default(0) @db.TinyInt
+  use_buffer_table                      Int     @default(0) @db.TinyInt
+  tmdb_api_key                          String  @db.Text
+  toggle_menu                           Int     @default(0) @db.TinyInt
+  mobile_apps                           Int     @default(0) @db.TinyInt
+  stalker_container_priority            String  @db.Text
+  gen_container_priority                String  @db.Text
+  tmdb_default                          String  @default("en") @db.VarChar(3)
+  series_custom_name                    Int     @default(0) @db.TinyInt
+  mag_security                          Int     @default(0) @db.TinyInt
+  logo_url_sidebar                      String  @db.MediumText
+  page_mannuals                         String  @db.MediumText
+  sucessedit                            Int     @default(1) @db.TinyInt
+
+  @@ignore
+}
+
+model signals {
+  signal_id Int @id @default(autoincrement())
+  pid       Int
+  server_id Int
+  rtmp      Int @default(0) @db.TinyInt
+  time      Int
+
+  @@index([server_id], map: "server_id")
+  @@index([time], map: "time")
+}
+
+model stream_categories {
+  id            Int    @id @default(autoincrement())
+  category_type String @db.VarChar(255)
+  category_name String @db.VarChar(255)
+  parent_id     Int    @default(0)
+  cat_order     Int    @default(0)
+
+  @@index([cat_order], map: "cat_order")
+  @@index([category_type], map: "category_type")
+  @@index([parent_id], map: "parent_id")
+}
+
+model stream_logs {
+  id        Int    @id @default(autoincrement())
+  stream_id Int
+  server_id Int
+  date      Int
+  error     String @db.VarChar(500)
+
+  @@index([server_id], map: "server_id")
+  @@index([stream_id], map: "stream_id")
+}
+
+model stream_subcategories {
+  sub_id           Int    @id @default(autoincrement())
+  parent_id        Int
+  subcategory_name String @db.VarChar(255)
+
+  @@index([parent_id], map: "parent_id")
+}
+
+model streaming_servers {
+  id                       Int     @id @default(autoincrement())
+  server_name              String  @db.VarChar(255)
+  domain_name              String  @db.VarChar(255)
+  server_ip                String? @db.VarChar(255)
+  vpn_ip                   String  @db.VarChar(255)
+  ssh_password             String? @db.MediumText
+  ssh_port                 Int?
+  diff_time_main           Int     @default(0)
+  http_broadcast_port      Int
+  total_clients            Int     @default(0)
+  system_os                String? @db.VarChar(255)
+  network_interface        String  @db.VarChar(255)
+  latency                  Float   @default(0) @db.Float
+  status                   Int     @default(-1) @db.TinyInt
+  enable_geoip             Int     @default(0)
+  geoip_countries          String  @db.MediumText
+  last_check_ago           Int     @default(0)
+  can_delete               Int     @default(1) @db.TinyInt
+  server_hardware          String  @db.Text
+  total_services           Int     @default(3)
+  persistent_connections   Int     @default(0) @db.TinyInt
+  rtmp_port                Int     @default(8001)
+  geoip_type               String  @default("low_priority") @db.VarChar(13)
+  isp_names                String  @db.MediumText
+  isp_type                 String  @default("low_priority") @db.VarChar(13)
+  enable_isp               Int     @default(0) @db.TinyInt
+  boost_fpm                Int     @default(0) @db.TinyInt
+  http_ports_add           String  @db.Text
+  network_guaranteed_speed Int     @default(0)
+  https_broadcast_port     Int     @default(25463)
+  https_ports_add          String  @db.Text
+  whitelist_ips            String  @db.Text
+  watchdog_data            String  @db.MediumText
+  timeshift_only           Int     @default(0) @db.TinyInt
+  http_isp_port            Int     @default(8805)
+  enable_duplex            Int     @default(0)
+
+  @@unique([server_ip, http_broadcast_port], map: "server_ip")
+  @@index([status], map: "status")
+  @@index([total_clients], map: "total_clients")
+}
+
+model streams {
+  id                       Int     @id @default(autoincrement())
+  type                     Int
+  category_id              Int?
+  stream_display_name      String  @db.MediumText
+  stream_source            String? @db.MediumText
+  stream_icon              String  @db.MediumText
+  notes                    String? @db.MediumText
+  created_channel_location Int?
+  enable_transcode         Int     @default(0) @db.TinyInt
+  transcode_attributes     String  @db.MediumText
+  custom_ffmpeg            String  @db.MediumText
+  movie_propeties          String? @db.MediumText
+  movie_subtitles          String  @db.MediumText
+  read_native              Int     @default(1) @db.TinyInt
+  target_container         String? @db.Text
+  stream_all               Int     @default(0) @db.TinyInt
+  remove_subtitles         Int     @default(0) @db.TinyInt
+  custom_sid               String? @db.VarChar(150)
+  epg_id                   Int?
+  channel_id               String? @db.VarChar(255)
+  epg_lang                 String? @db.VarChar(255)
+  order                    Int     @default(0)
+  auto_restart             String  @db.Text
+  transcode_profile_id     Int     @default(0)
+  pids_create_channel      String  @db.MediumText
+  cchannel_rsources        String  @db.MediumText
+  gen_timestamps           Int     @default(1) @db.TinyInt
+  added                    Int
+  series_no                Int     @default(0)
+  direct_source            Int     @default(0) @db.TinyInt
+  tv_archive_duration      Int     @default(0)
+  tv_archive_server_id     Int     @default(0)
+  tv_archive_pid           Int     @default(0)
+  movie_symlink            Int     @default(0) @db.TinyInt
+  redirect_stream          Int     @default(0) @db.TinyInt
+  rtmp_output              Int     @default(0) @db.TinyInt
+  number                   Int
+  allow_record             Int     @default(0) @db.TinyInt
+  probesize_ondemand       Int     @default(128000)
+  custom_map               String  @db.Text
+  external_push            String  @db.MediumText
+  delay_minutes            Int     @default(0)
+
+  @@index([category_id], map: "category_id")
+  @@index([channel_id], map: "channel_id")
+  @@index([created_channel_location], map: "created_channel_location")
+  @@index([direct_source], map: "direct_source")
+  @@index([enable_transcode], map: "enable_transcode")
+  @@index([epg_id], map: "epg_id")
+  @@index([order], map: "order")
+  @@index([read_native], map: "read_native")
+  @@index([rtmp_output], map: "rtmp_output")
+  @@index([transcode_profile_id], map: "transcode_profile_id")
+  @@index([type], map: "type")
+}
+
+model streams_arguments {
+  id                     Int     @id @default(autoincrement())
+  argument_cat           String  @db.VarChar(255)
+  argument_name          String  @db.VarChar(255)
+  argument_description   String  @db.MediumText
+  argument_wprotocol     String? @db.VarChar(255)
+  argument_key           String  @db.VarChar(255)
+  argument_cmd           String? @db.VarChar(255)
+  argument_type          String  @db.VarChar(255)
+  argument_default_value String? @db.VarChar(255)
+}
+
+model streams_options {
+  id          Int     @id @default(autoincrement())
+  stream_id   Int
+  argument_id Int
+  value       String? @db.Text
+
+  @@index([argument_id], map: "argument_id")
+  @@index([stream_id], map: "stream_id")
+}
+
+model streams_providers {
+  provider_id   Int    @id @default(autoincrement())
+  provider_name String @db.VarChar(255)
+  provider_dns  String @db.VarChar(255)
+  username      String @db.VarChar(100)
+  password      String @db.VarChar(100)
+
+  @@index([provider_dns], map: "provider_dns")
+  @@index([provider_name], map: "provider_name")
+}
+
+model streams_seasons {
+  season_id   Int    @id @default(autoincrement())
+  season_name String @db.VarChar(255)
+  stream_id   Int
+}
+
+model streams_sys {
+  server_stream_id   Int     @id @default(autoincrement())
+  stream_id          Int
+  server_id          Int
+  parent_id          Int?
+  pid                Int?
+  to_analyze         Int     @default(0) @db.TinyInt
+  stream_status      Int     @default(0)
+  stream_started     Int?
+  stream_info        String  @db.MediumText
+  monitor_pid        Int?
+  current_source     String? @db.MediumText
+  bitrate            Int?
+  progress_info      String  @db.Text
+  on_demand          Int     @default(0) @db.TinyInt
+  delay_pid          Int?
+  delay_available_at Int?
+
+  @@unique([stream_id, server_id], map: "stream_id_2")
+  @@index([parent_id], map: "parent_id")
+  @@index([pid], map: "pid")
+  @@index([server_id], map: "server_id")
+  @@index([stream_id], map: "stream_id")
+  @@index([stream_started], map: "stream_started")
+  @@index([stream_status], map: "stream_status")
+  @@index([to_analyze], map: "to_analyze")
+}
+
+model streams_types {
+  type_id     Int    @id @default(autoincrement())
+  type_name   String @db.VarChar(255)
+  type_key    String @db.VarChar(255)
+  type_output String @db.VarChar(255)
+  live        Int    @db.TinyInt
+
+  @@index([live], map: "live")
+  @@index([type_key], map: "type_key")
+  @@index([type_output], map: "type_output")
+}
+
+model subreseller_setup {
+  id          Int      @id @default(autoincrement())
+  reseller    Int      @default(0)
+  subreseller Int      @default(0)
+  status      Int      @default(1)
+  dateadded   DateTime @default(now()) @db.Timestamp(0)
+}
+
+model suspicious_logs {
+  id           Int      @id @default(autoincrement())
+  user_id      Int
+  data         String   @db.MediumText
+  last_updated DateTime @db.DateTime(0)
+
+  @@index([user_id], map: "user_id")
+}
+
+model tickets {
+  id         Int    @id @default(autoincrement())
+  member_id  Int
+  title      String @db.VarChar(255)
+  status     Int    @default(1)
+  admin_read Int    @db.TinyInt
+  user_read  Int    @db.TinyInt
+
+  @@index([admin_read], map: "admin_read")
+  @@index([member_id], map: "member_id")
+  @@index([status], map: "status")
+  @@index([user_read], map: "user_read")
+}
+
+model tickets_replies {
+  id          Int    @id @default(autoincrement())
+  ticket_id   Int
+  admin_reply Int    @db.TinyInt
+  message     String @db.MediumText
+  date        Int
+
+  @@index([ticket_id], map: "ticket_id")
+}
+
+model tmdb_async {
+  id        Int      @id @default(autoincrement())
+  type      Int      @default(0)
+  stream_id Int      @default(0)
+  status    Int      @default(0)
+  dateadded DateTime @default(now()) @db.Timestamp(0)
+}
+
+model transcoding_profiles {
+  profile_id      Int    @id @default(autoincrement())
+  profile_name    String @db.VarChar(255)
+  profile_options String @db.MediumText
+}
+
+model user_activity {
+  activity_id        Int     @id @default(autoincrement())
+  user_id            Int
+  stream_id          Int
+  server_id          Int
+  user_agent         String? @db.VarChar(255)
+  user_ip            String  @db.VarChar(39)
+  container          String  @db.VarChar(50)
+  date_start         Int
+  date_end           Int?
+  geoip_country_code String  @db.VarChar(22)
+  isp                String  @db.VarChar(255)
+  external_device    String  @db.VarChar(255)
+  divergence         Int?
+
+  @@index([container], map: "container")
+  @@index([date_end], map: "date_end")
+  @@index([date_start], map: "date_start")
+  @@index([date_start, date_end], map: "date_start_2")
+  @@index([geoip_country_code], map: "geoip_country_code")
+  @@index([isp], map: "isp")
+  @@index([server_id], map: "server_id")
+  @@index([stream_id], map: "stream_id")
+  @@index([user_agent], map: "user_agent")
+  @@index([user_id], map: "user_id")
+  @@index([user_ip], map: "user_ip")
+}
+
+model user_activity_now {
+  activity_id        Int     @id @default(autoincrement())
+  user_id            Int
+  stream_id          Int
+  server_id          Int
+  user_agent         String? @db.VarChar(255)
+  user_ip            String  @db.VarChar(39)
+  container          String  @db.VarChar(50)
+  pid                Int?
+  date_start         Int
+  date_end           Int?
+  geoip_country_code String  @db.VarChar(22)
+  isp                String  @db.VarChar(255)
+  external_device    String  @db.VarChar(255)
+  divergence         Int?
+  hls_last_read      Int?
+  hls_end            Int     @default(0) @db.TinyInt
+
+  @@index([container], map: "container")
+  @@index([date_end], map: "date_end")
+  @@index([date_start], map: "date_start")
+  @@index([geoip_country_code], map: "geoip_country_code")
+  @@index([hls_end], map: "hls_end")
+  @@index([pid], map: "pid")
+  @@index([server_id], map: "server_id")
+  @@index([stream_id], map: "stream_id")
+  @@index([user_agent], map: "user_agent")
+  @@index([user_id], map: "user_id")
+  @@index([user_ip], map: "user_ip")
+}
+
+model user_output {
+  id               Int @id @default(autoincrement())
+  user_id          Int
+  access_output_id Int
+
+  @@index([access_output_id], map: "access_output_id")
+  @@index([user_id], map: "user_id")
+}
+
+model users {
+  id              Int     @id @default(autoincrement())
+  member_id       Int?
+  username        String  @db.VarChar(255)
+  password        String  @db.VarChar(255)
+  exp_date        Int?
+  admin_enabled   Int     @default(1)
+  enabled         Int     @default(1)
+  admin_notes     String  @db.MediumText
+  reseller_notes  String  @db.MediumText
+  bouquet         String  @db.MediumText
+  max_connections Int     @default(1)
+  is_restreamer   Int     @default(0) @db.TinyInt
+  allowed_ips     String  @db.MediumText
+  allowed_ua      String  @db.MediumText
+  is_trial        Int     @default(0) @db.TinyInt
+  created_at      Int
+  created_by      Int
+  pair_id         Int?
+  is_mag          Int     @default(0) @db.TinyInt
+  is_e2           Int     @default(0) @db.TinyInt
+  force_server_id Int     @default(0)
+  is_isplock      Int     @default(0) @db.TinyInt
+  as_number       String? @db.VarChar(30)
+  isp_desc        String? @db.MediumText
+  forced_country  String  @db.VarChar(3)
+  is_stalker      Int     @default(0) @db.TinyInt
+  bypass_ua       Int     @default(0) @db.TinyInt
+  play_token      String  @db.Text
+
+  @@index([admin_enabled], map: "admin_enabled")
+  @@index([created_at], map: "created_at")
+  @@index([created_by], map: "created_by")
+  @@index([enabled], map: "enabled")
+  @@index([exp_date], map: "exp_date")
+  @@index([is_e2], map: "is_e2")
+  @@index([is_mag], map: "is_mag")
+  @@index([is_restreamer], map: "is_restreamer")
+  @@index([is_trial], map: "is_trial")
+  @@index([member_id], map: "member_id")
+  @@index([pair_id], map: "pair_id")
+  @@index([password], map: "password")
+  @@index([username], map: "username")
+}
+
+model watch_categories {
+  id          Int    @id @default(autoincrement())
+  type        Int    @default(0)
+  genre_id    Int    @default(0)
+  genre       String @default("") @db.VarChar(64)
+  category_id Int    @default(0)
+  bouquets    String @default("[]") @db.VarChar(4096)
+}
+
+model watch_folders {
+  id                 Int    @id @default(autoincrement())
+  type               String @default("") @db.VarChar(32)
+  directory          String @default("") @db.VarChar(2048)
+  server_id          Int    @default(0)
+  category_id        Int    @default(0)
+  bouquets           String @default("[]") @db.VarChar(4096)
+  last_run           Int    @default(0)
+  active             Int    @default(1)
+  disable_tmdb       Int    @default(0)
+  ignore_no_match    Int    @default(0)
+  auto_subtitles     Int    @default(0)
+  fb_bouquets        String @default("[]") @db.VarChar(4096)
+  fb_category_id     Int    @default(0)
+  allowed_extensions String @default("[]") @db.VarChar(4096)
+}
+
+model watch_output {
+  id        Int      @id @default(autoincrement())
+  type      Int      @default(0)
+  server_id Int      @default(0)
+  filename  String   @default("") @db.VarChar(4096)
+  status    Int      @default(0)
+  stream_id Int      @default(0)
+  dateadded DateTime @default(now()) @db.Timestamp(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model watch_settings {
+  read_native          Int @default(1)
+  movie_symlink        Int @default(1)
+  auto_encode          Int @default(0)
+  transcode_profile_id Int @default(0)
+  scan_seconds         Int @default(3600)
+  percentage_match     Int @default(70)
+  ffprobe_input        Int @default(0)
+
+  @@ignore
+}
+
+model xtream_main {
+  id               Int    @id @default(autoincrement())
+  update_available Int    @default(0)
+  root_ip          String @db.MediumText
+}

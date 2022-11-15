@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.config
+.replit
+.build
+replit.nix
+.upm
+yarn.lock
+yarn-error.log

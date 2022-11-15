@@ -13,15 +13,16 @@ export class UserService {
     constructor(private readonly UsersRepo: IUsersRepository, private readonly UserOutputRepo: IUserOutputRepository) {
 
     }
-    async create(data: userRequiredFields): Promise<UsersWithUserOutputs>{
-        
-        if (await this.UsersRepo.verifyUsername(data.username)){
+    async create(data: userRequiredFields): Promise<UsersWithUserOutputs> {
+        let existingUser = await this.UsersRepo.verifyUsername(data.username)
+
+        if (existingUser) {
             throw Error("already exists")
         }
-        let user = await this.UsersRepo.create({...userDefaults, ...data})
+        let user = await this.UsersRepo.create({ ...userDefaults, ...data })
         let userOutputsToCreate = userOutputsDefaults.map((accessOutputID) => ({ access_output_id: accessOutputID }))
         let userOutputs = await this.UserOutputRepo.createMany(user.id, userOutputsToCreate)
-       return [user,userOutputs]
+        return [user, userOutputs]
     }
     async list(): Promise<UsersWithUserOutputs[]> {
 
@@ -39,11 +40,12 @@ export class UserService {
         return [user, userOutputs]
     }
     async updateByUsername(username: string, userData: Partial<Omit<usersModel, "id">>, acessOutputData: number[] = userOutputsDefaults): Promise<UsersWithUserOutputs> {
-        let user = await this.UsersRepo.updateByUsername(username, userData)
+        let user = await this.UsersRepo.getByUsername(username)
+        let updatedUser = await this.UsersRepo.updateByID(user.id, userData)
         await this.UserOutputRepo.deleteManyByUserID(user.id)
         let userOutputsToCreate = acessOutputData.map((accessOutputID) => ({ access_output_id: accessOutputID }))
         let userOutputs = await this.UserOutputRepo.createMany(user.id, userOutputsToCreate)
-        return [user, userOutputs]
+        return [updatedUser, userOutputs]
     }
     async deleteByUsername(username: string) {
         let user = await this.UsersRepo.getByUsername(username)

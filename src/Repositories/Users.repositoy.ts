@@ -38,7 +38,6 @@ export class UsersRepository implements IUsersRepository {
     }
     async deleteByUsername(username: string): Promise<void> {
 
-
         let user = await this.getByUsername(username)
         if (user.member_id != configs.memberID) {
             throw Error("the user does not belong to this member_id")

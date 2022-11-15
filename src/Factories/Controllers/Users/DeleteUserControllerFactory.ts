@@ -1,11 +1,14 @@
-import { DeleteUserController } from "~/Controllers/Users"
-import { UserService } from "~/Services/User.service"
-import { UsersRepository } from "~/Repositories/Users.repositoy"
-import { UserOutputRepository } from "~/Repositories/UserOutput.repository"
+import { DeleteUserController } from '~/Controllers/Users';
+import { UserOutputRepository } from '~/Repositories/UserOutput.repository';
+import { UsersRepository } from '~/Repositories/Users.repositoy';
+import { UserService } from '~/Services/User.service';
 
-export function DeleteUserControllerFactory(){
-    let UsersRepositoryInstance = new UsersRepository
-    let UserOutputRepositoryInstance = new UserOutputRepository
-    let UserServiceInstance = new UserService(UsersRepositoryInstance, UserOutputRepositoryInstance)
-    return new DeleteUserController(UserServiceInstance)
+export function DeleteUserControllerFactory() {
+  const UsersRepositoryInstance = new UsersRepository();
+  const UserOutputRepositoryInstance = new UserOutputRepository();
+  const UserServiceInstance = new UserService(
+    UsersRepositoryInstance,
+    UserOutputRepositoryInstance
+  );
+  return new DeleteUserController(UserServiceInstance);
 }

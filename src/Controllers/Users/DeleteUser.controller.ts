@@ -1,19 +1,22 @@
-import { fail, HttpResponse, ok } from "~/Helpers/HTTPResponseHelpers"
-import { UserService } from "~/Services/User.service"
-import { Controller } from "../BaseController"
+import { fail, HttpResponse, ok } from '~/Helpers/HTTPResponseHelpers';
+import { UserService } from '~/Services/User.service';
+
+import { Controller } from '../BaseController';
 
 type DeleteUserControllerRequest = {
-    username: string
-}
+  username: string;
+};
 
 export class DeleteUserController implements Controller {
-    constructor(private userService: UserService) {
+  constructor(private userService: UserService) {}
 
+  async handle({
+    username
+  }: DeleteUserControllerRequest): Promise<HttpResponse> {
+    try {
+      return ok(await this.userService.deleteByUsername(username));
+    } catch (e) {
+      return fail(e);
     }
-    async handle({ username }: DeleteUserControllerRequest): Promise<HttpResponse> {
-        try { return ok(await this.userService.deleteByUsername(username)) }
-        catch (e) {
-            return fail(e)
-        }
-    }
+  }
 }

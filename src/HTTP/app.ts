@@ -1,12 +1,12 @@
-import express from "express"
-import {router} from "./Routes"
-import bodyParser from "body-parser"
+import bodyParser from 'body-parser';
+import express from 'express';
 
+import { router } from './Routes';
 
-const app = express()
+const app = express();
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-app.use(router)
+app.use(router);
 
-export {app}
+export { app };

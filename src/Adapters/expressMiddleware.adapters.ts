@@ -1,31 +1,30 @@
-import { Request, Response, NextFunction } from 'express'
-
-import { Middleware } from '~/Middlewares/Middleware'
+import { Middleware } from '~/Middlewares/Middleware';
+import { Request, Response, NextFunction } from 'express';
 
 export const adaptMiddleware = (middleware: Middleware) => {
   return async (request: Request, response: Response, next: NextFunction) => {
     const requestData = {
       accessToken: request.headers?.['x-access-token'],
-      ...(request.headers || {}),
-    }
+      ...(request.headers || {})
+    };
 
-    const httpResponse = await middleware.handle(requestData, request.body)
+    const httpResponse = await middleware.handle(requestData, request.body);
 
     /**
      * Not an error, but stop request process
      */
     if (httpResponse === false) {
-      return response.status(200).send()
+      return response.status(200).send();
     }
 
     if (httpResponse.statusCode === 200) {
-      Object.assign(request, httpResponse.body)
+      Object.assign(request, httpResponse.body);
 
-      return next()
+      return next();
     } else {
       return response.status(httpResponse.statusCode).json({
-        error: httpResponse.body.error,
-      })
+        error: httpResponse.body.error
+      });
     }
-  }
-}
+  };
+};

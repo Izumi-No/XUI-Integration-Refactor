@@ -8,3 +8,4 @@ replit.nix
 .upm
 yarn.lock
 yarn-error.log
+pnpm-lock.yaml

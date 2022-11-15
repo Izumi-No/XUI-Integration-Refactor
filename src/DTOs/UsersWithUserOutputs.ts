@@ -1,3 +1,3 @@
-import { users, user_output } from "@prisma/client";
+import { users, user_output } from '@prisma/client';
 
-export type UsersWithUserOutputs = [users, user_output[]]
+export type UsersWithUserOutputs = [users, user_output[]];

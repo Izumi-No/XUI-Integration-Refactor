@@ -1,7 +1,4 @@
-import {
-  users as usersModel,
-  user_output as userOutputModel
-} from '.prisma/client';
+import { users as usersModel } from '.prisma/client';
 
 import { userOutputsDefaults, userDefaults } from '~/configs';
 import { userRequiredFields } from '~/Controllers/userRequiredFields';
@@ -9,11 +6,13 @@ import { UsersWithUserOutputs } from '~/DTOs/UsersWithUserOutputs';
 
 import { IUserOutputRepository } from '../Interfaces/IUserOutputRepository';
 import { IUsersRepository } from '../Interfaces/IUsersRepository';
+import { PlanService } from './Plans.service';
 
 export class UserService {
   constructor(
     private readonly UsersRepo: IUsersRepository,
-    private readonly UserOutputRepo: IUserOutputRepository
+    private readonly UserOutputRepo: IUserOutputRepository,
+    private readonly PlanService: PlanService
   ) {}
 
   async create(data: userRequiredFields): Promise<UsersWithUserOutputs> {
@@ -22,10 +21,33 @@ export class UserService {
     if (existingUser) {
       throw Error('already exists');
     }
-    const user = await this.UsersRepo.create({ ...userDefaults, ...data });
+    const { plano: plan, ...dataWithoutPlano } = data;
+
+    if (!(await this.PlanService.HaveCredits(plan))) {
+      throw Error("don't have enough credits to create");
+    }
+
+    const plano = await this.PlanService.getByIndex(plan);
+    const creationDate = new Date().getTime();
+    const months = 2678400 * (plano.meses ? plano.meses : 0);
+    const hours = 3600 * (plano.horas ? plano.horas : 0);
+    const expirationDate = creationDate + months + hours;
+    const isTrial = typeof plano.teste !== 'undefined' && plano.teste ? 1 : 0;
+    const user = await this.UsersRepo.create({
+      ...userDefaults,
+      ...dataWithoutPlano,
+      created_at: creationDate,
+      exp_date: expirationDate,
+      is_trial: isTrial,
+      max_connections: plano.telas
+    });
+
     const userOutputsToCreate = userOutputsDefaults.map(accessOutputID => ({
       access_output_id: accessOutputID
     }));
+
+    this.PlanService.debit(data.plano);
+
     const userOutputs = await this.UserOutputRepo.createMany(
       user.id,
       userOutputsToCreate
@@ -67,6 +89,24 @@ export class UserService {
       userOutputsToCreate
     );
     return [updatedUser, userOutputs];
+  }
+
+  async renewByUsername(username: string, plan: number): Promise<usersModel> {
+    if (!(await this.PlanService.HaveCredits(plan))) {
+      throw Error("don't have enough credits to renew");
+    }
+    const plano = await this.PlanService.getByIndex(plan);
+    const user = await this.UsersRepo.getByUsername(username);
+    const months = 2678400 * (plano.meses ? plano.meses : 0);
+    const hours = 3600 * (plano.horas ? plano.horas : 0);
+    const newExpdate = new Date().getTime() + months + hours;
+
+    const updatedUser = await this.UsersRepo.updateByID(user.id, {
+      max_connections: plano.telas,
+      exp_date: newExpdate
+    });
+
+    return updatedUser;
   }
 
   async deleteByUsername(username: string) {

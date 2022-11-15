@@ -1,3 +1,6 @@
 {
-  "extends": "@sn0wye/eslint-config/react"
+  "extends": "@sn0wye/eslint-config/react",
+  "rules" : {
+    "no-useless-constructor": "off"
+  }
 }

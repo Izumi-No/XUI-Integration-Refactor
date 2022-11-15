@@ -3,3 +3,4 @@ export { DeleteUserControllerFactory } from './DeleteUserControllerFactory';
 export { GetOneUserControllerFactory } from './GetOneUserControllerFactory';
 export { ListUserControllerFactory } from './ListUserControllerFactory';
 export { UpdateUserControllerFactory } from './UpdateUserControllerFactory';
+export { RenewUserControllerFactory } from './RenewUserControllerFactory';

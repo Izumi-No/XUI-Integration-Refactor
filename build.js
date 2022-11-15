@@ -5,7 +5,7 @@ const tsPaths = require("esbuild-ts-paths")
 const { nodeExternalsPlugin } = require('esbuild-node-externals');
 
 build({
-  entry: "index.ts",
+  entry: "src/index.ts",
   outfile: "dist/bundle.js",platform: 'node',
   bundle: true,
   plugins: [tsPaths(

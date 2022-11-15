@@ -23,7 +23,7 @@ export class UsersRepository implements IUsersRepository {
 
   async deleteByID(id: number): Promise<void> {
     const user = await this.getByID(id);
-    if (user.member_id != configs.memberID) {
+    if (user.member_id !== configs.memberID) {
       throw Error('the user does not belong to this member_id');
     }
     await PrismaClient.users.delete({ where: { id } });
@@ -34,7 +34,7 @@ export class UsersRepository implements IUsersRepository {
     data: Partial<Omit<users, 'id'>>
   ): Promise<users> {
     const user = await this.getByID(id);
-    if (user.member_id != configs.memberID) {
+    if (user.member_id !== configs.memberID) {
       throw Error('the user does not belong to this member_id');
     }
     return await PrismaClient.users.update({ data, where: { id } });
@@ -49,7 +49,7 @@ export class UsersRepository implements IUsersRepository {
 
   async deleteByUsername(username: string): Promise<void> {
     const user = await this.getByUsername(username);
-    if (user.member_id != configs.memberID) {
+    if (user.member_id !== configs.memberID) {
       throw Error('the user does not belong to this member_id');
     }
     return await this.deleteByID(user.id);
@@ -60,7 +60,7 @@ export class UsersRepository implements IUsersRepository {
     data: Partial<Omit<users, 'id'>>
   ): Promise<users> {
     const user = await this.getByUsername(username);
-    if (user.member_id != configs.memberID) {
+    if (user.member_id !== configs.memberID) {
       throw Error('the user does not belong to this member_id');
     }
     return await this.updateByID(user.id, data);

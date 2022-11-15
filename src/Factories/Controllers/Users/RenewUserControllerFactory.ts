@@ -1,4 +1,4 @@
-import { DeleteUserController } from '~/Controllers/Users';
+import { RenewUserController } from '~/Controllers/Users';
 import { planos } from '~/Plans';
 import { RegUsersRepository } from '~/Repositories/RegUsers.repository';
 import { UserOutputRepository } from '~/Repositories/UserOutput.repository';
@@ -6,7 +6,7 @@ import { UsersRepository } from '~/Repositories/Users.repositoy';
 import { PlanService } from '~/Services/Plans.service';
 import { UserService } from '~/Services/User.service';
 
-export function DeleteUserControllerFactory() {
+export function RenewUserControllerFactory() {
   const UsersRepositoryInstance = new UsersRepository();
   const UserOutputRepositoryInstance = new UserOutputRepository();
   const RegUsersRepositoryInstance = new RegUsersRepository();
@@ -19,5 +19,5 @@ export function DeleteUserControllerFactory() {
     UserOutputRepositoryInstance,
     PlanServiceInstance
   );
-  return new DeleteUserController(UserServiceInstance);
+  return new RenewUserController(UserServiceInstance);
 }

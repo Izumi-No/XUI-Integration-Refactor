@@ -9,12 +9,15 @@ export class AuthMiddleware implements Middleware {
 
   async handle(req: { authorization: string }): Promise<HttpResponse> {
     const bearrerHeader = req.authorization;
-    if (typeof bearrerHeader === 'undefined')
+    if (typeof bearrerHeader === 'undefined') {
       return forbidden(new AccessDeniedError());
+    }
     const bearrer = bearrerHeader.split(' ');
     const bearrerToken = bearrer[1];
 
-    if (bearrerToken == configs.secret) return ok();
+    if (bearrerToken === configs.secret) {
+      return ok();
+    }
     return forbidden(new AccessDeniedError());
   }
 }

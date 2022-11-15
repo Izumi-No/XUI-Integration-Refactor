@@ -1,0 +1,14 @@
+"use strict";
+exports.__esModule = true;
+exports.userRouter = void 0;
+var expressRoute_adapter_1 = require("~/Adapters/expressRoute.adapter");
+var controllerFactories = require("~/Factories/Controllers/Users");
+var express_1 = require("express");
+var userRouter = (0, express_1.Router)();
+exports.userRouter = userRouter;
+userRouter.post('/', (0, expressRoute_adapter_1.expressRouteAdapter)(controllerFactories.CreateUserControllerFactory()));
+userRouter.get('/', (0, expressRoute_adapter_1.expressRouteAdapter)(controllerFactories.ListUserControllerFactory()));
+userRouter.get('/:username', (0, expressRoute_adapter_1.expressRouteAdapter)(controllerFactories.GetOneUserControllerFactory()));
+userRouter.patch('/:paramsUsername', (0, expressRoute_adapter_1.expressRouteAdapter)(controllerFactories.UpdateUserControllerFactory()));
+userRouter.post('/renew/:username', (0, expressRoute_adapter_1.expressRouteAdapter)(controllerFactories.RenewUserControllerFactory()));
+userRouter["delete"]('/:username', (0, expressRoute_adapter_1.expressRouteAdapter)(controllerFactories.DeleteUserControllerFactory()));

@@ -1,0 +1,10 @@
+"use strict";
+exports.__esModule = true;
+exports.app = void 0;
+var body_parser_1 = require("body-parser");
+var express_1 = require("express");
+var Routes_1 = require("./Routes");
+var app = (0, express_1["default"])();
+exports.app = app;
+app.use(body_parser_1["default"].json());
+app.use(Routes_1.router);

@@ -26,7 +26,7 @@ export class UpdateUserController implements Controller {
         )
       );
     } catch (e) {
-      fail(e);
+      return fail(e);
     }
   }
 }

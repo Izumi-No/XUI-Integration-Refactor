@@ -8,14 +8,19 @@
     "init": "npm i && npm run prisma:generate",
     "build": "node build.js",
     "start": "npm run build && node dist/bundle.js",
-    "dev": "npm run build -watch & node dist/bundle.js"
+    "dev": "npm run build -watch & node dist/bundle.js",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix"
   },
   "devDependencies": {
+    "@sn0wye/eslint-config": "^1.8.1",
     "esbuild": "^0.15.13",
     "esbuild-node-externals": "^1.5.0",
     "esbuild-ts-paths": "^1.1.3",
+    "eslint": "^8.27.0",
     "estrella": "^1.4.1",
-    "prisma": "^4.6.1"
+    "prisma": "^4.6.1",
+    "typescript": "^4.8.4"
   },
   "dependencies": {
     "@prisma/client": "^4.6.1",

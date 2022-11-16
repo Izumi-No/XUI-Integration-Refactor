@@ -123,10 +123,12 @@ export class UserService {
     newExpdate.setMonth(newExpdate.getMonth() + months);
     newExpdate.setHours(newExpdate.getHours() + hours);
     newExpdate.setHours(0, 0, 0, 0);
+    const isTrial = typeof plano.teste !== 'undefined' && plano.teste ? 1 : 0;
 
     const updatedUser = await this.UsersRepo.updateByID(user.id, {
       max_connections: plano.telas,
-      exp_date: parseInt((newExpdate.getTime() / 1000).toString())
+      exp_date: parseInt((newExpdate.getTime() / 1000).toString()),
+      is_trial: isTrial
     });
 
     return updatedUser;

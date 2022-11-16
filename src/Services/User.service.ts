@@ -36,7 +36,6 @@ export class UserService {
     expirationDate.setMonth(expirationDate.getMonth() + months);
     expirationDate.setHours(expirationDate.getHours() + hours);
     expirationDate.setHours(0, 0, 0, 0);
-    console.log(parseInt((expirationDate.getTime() / 1000).toString()));
     const isTrial = typeof plano.teste !== 'undefined' && plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({
       ...userDefaults,
@@ -115,6 +114,7 @@ export class UserService {
         max_connections: plano.telas,
         exp_date: parseInt((newExpdate.getTime() / 1000).toString())
       });
+      this.PlanService.debit(plan);
 
       return updatedUser;
     }
@@ -130,6 +130,7 @@ export class UserService {
       exp_date: parseInt((newExpdate.getTime() / 1000).toString()),
       is_trial: isTrial
     });
+    this.PlanService.debit(plan);
 
     return updatedUser;
   }

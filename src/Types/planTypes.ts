@@ -3,5 +3,5 @@ export type plan = {
   meses?: number;
   horas?: number;
   custo: number;
-  teste?: boolean;
+  teste: boolean;
 };

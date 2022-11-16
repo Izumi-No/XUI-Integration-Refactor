@@ -2,7 +2,7 @@ import { Iconfigs } from './Types/configTypes';
 
 export const configs: Iconfigs = {
   secret: 'test123',
-  memberID: 1
+  memberID: 2
 };
 
 export const userDefaults = {

@@ -10,6 +10,7 @@ export const planos: plan[] = [
   {
     meses: 1,
     telas: 1,
-    custo: 10.0
+    custo: 10.0,
+    teste: false
   }
 ];

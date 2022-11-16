@@ -28,16 +28,21 @@ export class UserService {
     }
 
     const plano = await this.PlanService.getByIndex(plan);
-    const creationDate = new Date().getTime();
-    const months = 2678400 * (plano.meses ? plano.meses : 0);
-    const hours = 3600 * (plano.horas ? plano.horas : 0);
-    const expirationDate = creationDate + months + hours;
+    const creationDate = new Date();
+    const months = typeof plano.meses !== 'undefined' ? plano.meses : 0;
+    const hours = typeof plano.horas !== 'undefined' ? plano.horas : 0;
+    // eslint-disable-next-line prefer-const
+    let expirationDate = new Date(creationDate);
+    expirationDate.setMonth(expirationDate.getMonth() + months);
+    expirationDate.setHours(expirationDate.getHours() + hours);
+    expirationDate.setHours(0, 0, 0, 0);
+    console.log(parseInt((expirationDate.getTime() / 1000).toString()));
     const isTrial = typeof plano.teste !== 'undefined' && plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({
       ...userDefaults,
       ...dataWithoutPlano,
-      created_at: creationDate,
-      exp_date: expirationDate,
+      created_at: parseInt((creationDate.getTime() / 1000).toString()),
+      exp_date: parseInt((expirationDate.getTime() / 1000).toString()),
       is_trial: isTrial,
       max_connections: plano.telas
     });
@@ -97,13 +102,31 @@ export class UserService {
     }
     const plano = await this.PlanService.getByIndex(plan);
     const user = await this.UsersRepo.getByUsername(username);
-    const months = 2678400 * (plano.meses ? plano.meses : 0);
-    const hours = 3600 * (plano.horas ? plano.horas : 0);
-    const newExpdate = new Date().getTime() + months + hours;
+    const months = typeof plano.meses !== 'undefined' ? plano.meses : 0;
+    const hours = typeof plano.horas !== 'undefined' ? plano.horas : 0;
+    if (user.exp_date * 1000 > new Date().getTime()) {
+      // eslint-disable-next-line prefer-const
+      let newExpdate = new Date(user.exp_date * 1000);
+      newExpdate.setMonth(newExpdate.getMonth() + months);
+      newExpdate.setHours(newExpdate.getHours() + hours);
+      newExpdate.setHours(0, 0, 0, 0);
+
+      const updatedUser = await this.UsersRepo.updateByID(user.id, {
+        max_connections: plano.telas,
+        exp_date: parseInt((newExpdate.getTime() / 1000).toString())
+      });
+
+      return updatedUser;
+    }
+    // eslint-disable-next-line prefer-const
+    let newExpdate = new Date();
+    newExpdate.setMonth(newExpdate.getMonth() + months);
+    newExpdate.setHours(newExpdate.getHours() + hours);
+    newExpdate.setHours(0, 0, 0, 0);
 
     const updatedUser = await this.UsersRepo.updateByID(user.id, {
       max_connections: plano.telas,
-      exp_date: newExpdate
+      exp_date: parseInt((newExpdate.getTime() / 1000).toString())
     });
 
     return updatedUser;

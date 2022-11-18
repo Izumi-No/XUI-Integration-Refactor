@@ -9,7 +9,7 @@ planRouter.get(
 );
 planRouter.get(
   '/credits',
-  expressRouteAdapter(controllerFactories.DebitPlanControllerFactory())
+  expressRouteAdapter(controllerFactories.GetCreditsControllerFactory())
 );
 
 export { planRouter };

@@ -16,6 +16,11 @@ export class PlanService {
     return this.plans[index];
   }
 
+  async getCredits(): Promise<number> {
+    const { credits } = await this.RegUsersRepo.getByID(configs.memberID);
+    return credits;
+  }
+
   async debit(plano: number) {
     const regUser = await this.RegUsersRepo.getByID(configs.memberID);
     if (regUser.credits < this.plans[plano].custo) {

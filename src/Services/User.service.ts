@@ -120,17 +120,15 @@ export class UserService {
     }
 
     // eslint-disable-next-line prefer-const
-    // eslint-disable-next-line prefer-const
-    let newExpirationDate = new Date();
-    newExpirationDate.setMinutes(newExpirationDate.getMinutes() + 60 * hours);
-    newExpirationDate.setMinutes(
-      newExpirationDate.getMinutes() + 60 * 24 * 30 * months
-    );
+    let newExpirationDate =
+      Math.floor(Date.now() / 1000) +
+      60 * 60 * hours +
+      60 * 60 * 24 * 30 * months;
     const isTrial = plano.teste ? 1 : 0;
 
     const updatedUser = await this.UsersRepo.updateByID(user.id, {
       max_connections: plano.telas,
-      exp_date: parseInt((newExpirationDate.getTime() / 1000).toString()),
+      exp_date: newExpirationDate,
       is_trial: isTrial
     });
     this.PlanService.debit(plan);

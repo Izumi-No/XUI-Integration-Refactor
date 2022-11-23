@@ -103,7 +103,7 @@ export class UserService {
     const months = typeof plano.meses !== 'undefined' ? plano.meses : 0;
     const hours = typeof plano.horas !== 'undefined' ? plano.horas : 0;
 
-    if (user.exp_date * 1000 > Math.floor(Date.now() / 1000)) {
+    if (user.exp_date > Math.floor(Date.now() / 1000)) {
       // eslint-disable-next-line prefer-const
       let newExpirationDate =
         user.exp_date + 60 * 60 * hours + 60 * 60 * 24 * 30 * months;
@@ -120,17 +120,15 @@ export class UserService {
     }
 
     // eslint-disable-next-line prefer-const
-    // eslint-disable-next-line prefer-const
-    let newExpirationDate = new Date();
-    newExpirationDate.setMinutes(newExpirationDate.getMinutes() + 60 * hours);
-    newExpirationDate.setMinutes(
-      newExpirationDate.getMinutes() + 60 * 24 * 30 * months
-    );
+    let newExpirationDate =
+      Math.floor(Date.now() / 1000) +
+      60 * 60 * hours +
+      60 * 60 * 24 * 30 * months;
     const isTrial = plano.teste ? 1 : 0;
 
     const updatedUser = await this.UsersRepo.updateByID(user.id, {
       max_connections: plano.telas,
-      exp_date: parseInt((newExpirationDate.getTime() / 1000).toString()),
+      exp_date: newExpirationDate,
       is_trial: isTrial
     });
     this.PlanService.debit(plan);

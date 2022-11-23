@@ -33,7 +33,7 @@ export class UserService {
     const creationDate = Math.floor(Date.now() / 1000);
     // eslint-disable-next-line prefer-const
     let expirationDate =
-      creationDate + 60 * 60 * hours + 60 * 60 * 24 * 30 * months;
+      creationDate + 60 * 60 * hours + 60 * 60 * 24 * 30.44 * months;
 
     const isTrial = plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({
@@ -106,7 +106,7 @@ export class UserService {
     if (user.exp_date > Math.floor(Date.now() / 1000)) {
       // eslint-disable-next-line prefer-const
       let newExpirationDate =
-        user.exp_date + 60 * 60 * hours + 60 * 60 * 24 * 30 * months;
+        user.exp_date + 60 * 60 * hours + 60 * 60 * 24 * 30.44 * months;
       const isTrial = plano.teste ? 1 : 0;
 
       const updatedUser = await this.UsersRepo.updateByID(user.id, {
@@ -123,7 +123,7 @@ export class UserService {
     let newExpirationDate =
       Math.floor(Date.now() / 1000) +
       60 * 60 * hours +
-      60 * 60 * 24 * 30 * months;
+      60 * 60 * 24 * 30.44 * months;
     const isTrial = plano.teste ? 1 : 0;
 
     const updatedUser = await this.UsersRepo.updateByID(user.id, {

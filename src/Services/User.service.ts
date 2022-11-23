@@ -33,7 +33,7 @@ export class UserService {
     const creationDate = Math.floor(Date.now() / 1000);
     // eslint-disable-next-line prefer-const
     let expirationDate =
-      creationDate + 60 * 60 * hours + 60 * 60 * 24 * 30.44 * months;
+      creationDate + 60 * 60 * hours + 60 * 60 * 24 * 30.5 * months;
 
     const isTrial = plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({

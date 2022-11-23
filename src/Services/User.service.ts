@@ -103,7 +103,7 @@ export class UserService {
     const months = typeof plano.meses !== 'undefined' ? plano.meses : 0;
     const hours = typeof plano.horas !== 'undefined' ? plano.horas : 0;
 
-    if (user.exp_date * 1000 > Math.floor(Date.now() / 1000)) {
+    if (user.exp_date > Math.floor(Date.now() / 1000)) {
       // eslint-disable-next-line prefer-const
       let newExpirationDate =
         user.exp_date + 60 * 60 * hours + 60 * 60 * 24 * 30 * months;

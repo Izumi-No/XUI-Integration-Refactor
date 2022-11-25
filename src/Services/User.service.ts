@@ -36,7 +36,7 @@ export class UserService {
           
     let newExpDateFromTimestamp = new Date(creationDate * 1000);
     // newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
-    newExpDateFromTimestamp.setHour(0);
+    newExpDateFromTimestamp.setHours(0);
     newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
     newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
     let expirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
@@ -114,7 +114,7 @@ export class UserService {
       // eslint-disable-next-line prefer-const
       let newExpDateFromTimestamp = new Date(user.exp_date * 1000);
       // newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
-      newExpDateFromTimestamp.setHour(0);
+      newExpDateFromTimestamp.setHours(0);
       newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
       newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
       let newExpirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
@@ -133,7 +133,7 @@ export class UserService {
     // eslint-disable-next-line prefer-const
     let newExpDateFromTimestamp = new Date();
     // newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
-    newExpDateFromTimestamp.setHour(0);
+    newExpDateFromTimestamp.setHours(0);
     newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
     newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
     let newExpirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);

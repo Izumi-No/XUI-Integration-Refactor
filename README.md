@@ -17,6 +17,9 @@ http://95.217.163.120:3000/users/
 GET Listar Planos
 http://95.217.163.120:3000/plans/
 
+GET Listar Credito
+http://95.217.163.120:3000/plans/credits
+
 POST Criar Usuario
 http://95.217.163.120:3000/users/
 {

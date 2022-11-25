@@ -32,8 +32,11 @@ export class UserService {
     const hours = typeof plano.horas !== 'undefined' ? plano.horas : 0;
     const creationDate = Math.floor(Date.now() / 1000);
     // eslint-disable-next-line prefer-const
-    let expirationDate =
-      creationDate + 60 * 60 * hours + 60 * 60 * 24 * 30.765 * months;
+          
+    let newExpDateFromTimestamp = new Date(creationDate * 1000);
+    newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
+    newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
+    let expirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
 
     const isTrial = plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({
@@ -105,8 +108,10 @@ export class UserService {
 
     if (user.exp_date > Math.floor(Date.now() / 1000)) {
       // eslint-disable-next-line prefer-const
-      let newExpirationDate =
-        user.exp_date + 60 * 60 * hours + 60 * 60 * 24 * 30.765 * months;
+      let newExpDateFromTimestamp = new Date(user.exp_date * 1000);
+      newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
+      newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
+      let newExpirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
       const isTrial = plano.teste ? 1 : 0;
 
       const updatedUser = await this.UsersRepo.updateByID(user.id, {
@@ -120,10 +125,10 @@ export class UserService {
     }
 
     // eslint-disable-next-line prefer-const
-    let newExpirationDate =
-      Math.floor(Date.now() / 1000) +
-      60 * 60 * hours +
-      60 * 60 * 24 * 30.765 * months;
+    let newExpDateFromTimestamp = new Date();
+    newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
+    newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
+    let newExpirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
     const isTrial = plano.teste ? 1 : 0;
 
     const updatedUser = await this.UsersRepo.updateByID(user.id, {

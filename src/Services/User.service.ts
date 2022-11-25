@@ -30,11 +30,13 @@ export class UserService {
     const plano = await this.PlanService.getByIndex(plan);
     const months = typeof plano.meses !== 'undefined' ? plano.meses : 0;
     const hours = typeof plano.horas !== 'undefined' ? plano.horas : 0;
+    const days = typeof plano.dias !== 'undefined' ? plano.dias : 0;
     const creationDate = Math.floor(Date.now() / 1000);
     // eslint-disable-next-line prefer-const
           
     let newExpDateFromTimestamp = new Date(creationDate * 1000);
     newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
+    newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
     newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
     let expirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
 
@@ -105,11 +107,13 @@ export class UserService {
     const user = await this.UsersRepo.getByUsername(username);
     const months = typeof plano.meses !== 'undefined' ? plano.meses : 0;
     const hours = typeof plano.horas !== 'undefined' ? plano.horas : 0;
+    const days = typeof plano.dias !== 'undefined' ? plano.dias : 0;
 
     if (user.exp_date > Math.floor(Date.now() / 1000)) {
       // eslint-disable-next-line prefer-const
       let newExpDateFromTimestamp = new Date(user.exp_date * 1000);
       newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
+      newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
       newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
       let newExpirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
       const isTrial = plano.teste ? 1 : 0;
@@ -127,6 +131,7 @@ export class UserService {
     // eslint-disable-next-line prefer-const
     let newExpDateFromTimestamp = new Date();
     newExpDateFromTimestamp.setHours(newExpDateFromTimestamp.getHours() + hours);
+    newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
     newExpDateFromTimestamp.setMonth(newExpDateFromTimestamp.getMonth() + months);
     let newExpirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
     const isTrial = plano.teste ? 1 : 0;

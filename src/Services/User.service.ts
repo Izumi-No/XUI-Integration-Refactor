@@ -36,14 +36,14 @@ export class UserService {
     let expirationDate = new Date(creationDate * 1000);
 
     expirationDate.setMonth(expirationDate.getMonth() + months);
-    expirationDate.setHours(expirationDate.getHours() + hours);
-
     const isTrial = plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({
       ...userDefaults,
       ...dataWithoutPlano,
       created_at: creationDate,
-      exp_date: Math.floor(expirationDate.getTime() / 1000),
+      exp_date: Math.floor(
+        expirationDate.getTime() + (60 * 60 * hours) / 1000
+      ),
       is_trial: isTrial,
       max_connections: plano.telas
     });
@@ -111,12 +111,13 @@ export class UserService {
       let newExpirationDate = new Date(user.exp_date * 1000);
 
       newExpirationDate.setMonth(newExpirationDate.getMonth() + months);
-      newExpirationDate.setHours(newExpirationDate.getHours() + hours);
       const isTrial = plano.teste ? 1 : 0;
 
       const updatedUser = await this.UsersRepo.updateByID(user.id, {
         max_connections: plano.telas,
-        exp_date: Math.floor(newExpirationDate.getTime() / 1000),
+        exp_date: Math.floor(
+          newExpirationDate.getTime() + (60 * 60 * hours) / 1000
+        ),
         is_trial: isTrial
       });
       this.PlanService.debit(plan);
@@ -128,12 +129,13 @@ export class UserService {
     let newExpirationDate = new Date();
 
     newExpirationDate.setMonth(newExpirationDate.getMonth() + months);
-    newExpirationDate.setHours(newExpirationDate.getHours() + hours);
     const isTrial = plano.teste ? 1 : 0;
 
     const updatedUser = await this.UsersRepo.updateByID(user.id, {
       max_connections: plano.telas,
-      exp_date: Math.floor(newExpirationDate.getTime() / 1000),
+      exp_date: Math.floor(
+        newExpirationDate.getTime() + (60 * 60 * hours) / 1000
+      ),
       is_trial: isTrial
     });
     this.PlanService.debit(plan);

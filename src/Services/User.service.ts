@@ -41,11 +41,11 @@ export class UserService {
     newExpDateFromTimestamp.setSeconds(0);
     newExpDateFromTimestamp.setMilliseconds(0);*/
 
-    if (hours >= 24) {
+    /*if (hours >= 24) {
       newExpDateFromTimestamp.setDate(
         newExpDateFromTimestamp.getDate() + Math.floor(hours / 24)
       );
-    }
+    }*/
     newExpDateFromTimestamp.setUTCMonth(
       newExpDateFromTimestamp.getUTCMonth() + months
     );
@@ -124,11 +124,11 @@ export class UserService {
       // eslint-disable-next-line prefer-const
       let newExpDateFromTimestamp = new Date(user.exp_date * 1000);
       //newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
-      if (hours >= 24) {
+      /*if (hours >= 24) {
         newExpDateFromTimestamp.setDate(
           newExpDateFromTimestamp.getDate() + Math.floor(hours / 24)
         );
-      }
+      }*/
       newExpDateFromTimestamp.setUTCMonth(
         newExpDateFromTimestamp.getUTCMonth() + months
       );
@@ -150,11 +150,11 @@ export class UserService {
     // eslint-disable-next-line prefer-const
     let newExpDateFromTimestamp = new Date();
 
-    if (hours >= 24) {
+    /*if (hours >= 24) {
       newExpDateFromTimestamp.setDate(
         newExpDateFromTimestamp.getDate() + Math.floor(hours / 24)
       );
-    }
+    }*/
     newExpDateFromTimestamp.setUTCMonth(
       newExpDateFromTimestamp.getUTCMonth() + months
     );

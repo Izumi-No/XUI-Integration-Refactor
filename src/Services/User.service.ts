@@ -36,13 +36,18 @@ export class UserService {
 
     let newExpDateFromTimestamp = new Date(creationDate * 1000);
 
-    //newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
-    newExpDateFromTimestamp.setMonth(
-      newExpDateFromTimestamp.getMonth() + months
+    /*newExpDateFromTimestamp.setHours(0);
+    newExpDateFromTimestamp.setMinutes(0);
+    newExpDateFromTimestamp.setSeconds(0);
+    newExpDateFromTimestamp.setMilliseconds(0);*/
+
+    newExpDateFromTimestamp.setUTCHours(
+      newExpDateFromTimestamp.getUTCHours() + hours
     );
-    let expirationDate = Number(
-      (newExpDateFromTimestamp.getTime() / 1000).toFixed(0)
+    newExpDateFromTimestamp.setUTCMonth(
+      newExpDateFromTimestamp.getUTCMonth() + months
     );
+    let expirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
 
     const isTrial = plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({
@@ -117,9 +122,11 @@ export class UserService {
       // eslint-disable-next-line prefer-const
       let newExpDateFromTimestamp = new Date(user.exp_date * 1000);
       //newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
-      newExpDateFromTimestamp.setHours(
-        newExpDateFromTimestamp.getHours() + hours,
-        newExpDateFromTimestamp.getMinutes()
+      newExpDateFromTimestamp.setUTCHours(
+        newExpDateFromTimestamp.getUTCHours() + hours
+      );
+      newExpDateFromTimestamp.setUTCMonth(
+        newExpDateFromTimestamp.getUTCMonth() + months
       );
       let newExpirationDate = Math.floor(
         newExpDateFromTimestamp.getTime() / 1000
@@ -139,20 +146,14 @@ export class UserService {
     // eslint-disable-next-line prefer-const
     let newExpDateFromTimestamp = new Date();
 
-    /*newExpDateFromTimestamp.setHours(0);
-    newExpDateFromTimestamp.setMinutes(0);
-    newExpDateFromTimestamp.setSeconds(0);
-    newExpDateFromTimestamp.setMilliseconds(0);*/
-    newExpDateFromTimestamp.setHours(
-      newExpDateFromTimestamp.getHours() + hours,
-      newExpDateFromTimestamp.getMinutes()
+    newExpDateFromTimestamp.setUTCHours(
+      newExpDateFromTimestamp.getUTCHours() + hours
     );
-    //newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
-    newExpDateFromTimestamp.setMonth(
-      newExpDateFromTimestamp.getMonth() + months
+    newExpDateFromTimestamp.setUTCMonth(
+      newExpDateFromTimestamp.getUTCMonth() + months
     );
-    let newExpirationDate = Number(
-      (newExpDateFromTimestamp.getTime() / 1000).toFixed(0)
+    let newExpirationDate = Math.floor(
+      newExpDateFromTimestamp.getTime() / 1000
     );
     const isTrial = plano.teste ? 1 : 0;
 

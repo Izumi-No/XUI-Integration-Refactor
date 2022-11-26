@@ -40,14 +40,14 @@ export class UserService {
     newExpDateFromTimestamp.setMinutes(0);
     newExpDateFromTimestamp.setSeconds(0);
     newExpDateFromTimestamp.setMilliseconds(0);*/
-    newExpDateFromTimestamp.setHours(
-      newExpDateFromTimestamp.getHours() + hours
-    );
+
     newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
     newExpDateFromTimestamp.setMonth(
       newExpDateFromTimestamp.getMonth() + months
     );
-    let expirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
+    let expirationDate = Math.floor(
+      newExpDateFromTimestamp.getTime() + (60 * 60 * 24 * hours) / 1000
+    );
 
     const isTrial = plano.teste ? 1 : 0;
     const user = await this.UsersRepo.create({
@@ -121,9 +121,6 @@ export class UserService {
     if (user.exp_date > Math.floor(Date.now() / 1000)) {
       // eslint-disable-next-line prefer-const
       let newExpDateFromTimestamp = new Date(user.exp_date * 1000);
-      newExpDateFromTimestamp.setHours(
-        newExpDateFromTimestamp.getHours() + hours
-      );
       /*newExpDateFromTimestamp.setHours(0);
       newExpDateFromTimestamp.setMinutes(0);
       newExpDateFromTimestamp.setSeconds(0);
@@ -133,7 +130,7 @@ export class UserService {
         newExpDateFromTimestamp.getMonth() + months
       );
       let newExpirationDate = Math.floor(
-        newExpDateFromTimestamp.getTime() / 1000
+        newExpDateFromTimestamp.getTime() + (60 * 60 * 24 * hours) / 1000
       );
       const isTrial = plano.teste ? 1 : 0;
 
@@ -149,9 +146,7 @@ export class UserService {
 
     // eslint-disable-next-line prefer-const
     let newExpDateFromTimestamp = new Date();
-    newExpDateFromTimestamp.setHours(
-      newExpDateFromTimestamp.getHours() + hours
-    );
+
     /*newExpDateFromTimestamp.setHours(0);
     newExpDateFromTimestamp.setMinutes(0);
     newExpDateFromTimestamp.setSeconds(0);
@@ -161,7 +156,7 @@ export class UserService {
       newExpDateFromTimestamp.getMonth() + months
     );
     let newExpirationDate = Math.floor(
-      newExpDateFromTimestamp.getTime() / 1000
+      newExpDateFromTimestamp.getTime() + (60 * 60 * 24 * hours) / 1000
     );
     const isTrial = plano.teste ? 1 : 0;
 

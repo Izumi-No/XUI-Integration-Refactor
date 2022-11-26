@@ -46,7 +46,7 @@ export class UserService {
       newExpDateFromTimestamp.getMonth() + months
     );
     let expirationDate = Math.floor(
-      newExpDateFromTimestamp.getTime() + (60 * 60 * 24 * hours) / 1000
+      (newExpDateFromTimestamp.getTime() + 60 * 60 * 24 * hours) / 1000
     );
 
     const isTrial = plano.teste ? 1 : 0;
@@ -130,7 +130,7 @@ export class UserService {
         newExpDateFromTimestamp.getMonth() + months
       );
       let newExpirationDate = Math.floor(
-        newExpDateFromTimestamp.getTime() + (60 * 60 * 24 * hours) / 1000
+        (newExpDateFromTimestamp.getTime() + 60 * 60 * 24 * hours) / 1000
       );
       const isTrial = plano.teste ? 1 : 0;
 
@@ -156,7 +156,7 @@ export class UserService {
       newExpDateFromTimestamp.getMonth() + months
     );
     let newExpirationDate = Math.floor(
-      newExpDateFromTimestamp.getTime() + (60 * 60 * 24 * hours) / 1000
+      (newExpDateFromTimestamp.getTime() + 60 * 60 * 24 * hours) / 1000
     );
     const isTrial = plano.teste ? 1 : 0;
 

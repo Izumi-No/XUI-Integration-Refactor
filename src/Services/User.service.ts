@@ -40,14 +40,12 @@ export class UserService {
     newExpDateFromTimestamp.setMinutes(0);
     newExpDateFromTimestamp.setSeconds(0);
     newExpDateFromTimestamp.setMilliseconds(0);*/
-
-    /*if (hours >= 24) {
-      newExpDateFromTimestamp.setDate(
-        newExpDateFromTimestamp.getDate() + Math.floor(hours / 24)
-      );
-    }*/
-    newExpDateFromTimestamp.setUTCMonth(
-      newExpDateFromTimestamp.getUTCMonth() + months
+    newExpDateFromTimestamp.setHours(
+      newExpDateFromTimestamp.getHours() + hours
+    );
+    newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
+    newExpDateFromTimestamp.setMonth(
+      newExpDateFromTimestamp.getMonth() + months
     );
     let expirationDate = Math.floor(newExpDateFromTimestamp.getTime() / 1000);
 
@@ -123,14 +121,16 @@ export class UserService {
     if (user.exp_date > Math.floor(Date.now() / 1000)) {
       // eslint-disable-next-line prefer-const
       let newExpDateFromTimestamp = new Date(user.exp_date * 1000);
-      //newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
-      /*if (hours >= 24) {
-        newExpDateFromTimestamp.setDate(
-          newExpDateFromTimestamp.getDate() + Math.floor(hours / 24)
-        );
-      }*/
-      newExpDateFromTimestamp.setUTCMonth(
-        newExpDateFromTimestamp.getUTCMonth() + months
+      newExpDateFromTimestamp.setHours(
+        newExpDateFromTimestamp.getHours() + hours
+      );
+      /*newExpDateFromTimestamp.setHours(0);
+      newExpDateFromTimestamp.setMinutes(0);
+      newExpDateFromTimestamp.setSeconds(0);
+      newExpDateFromTimestamp.setMilliseconds(0);*/
+      newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
+      newExpDateFromTimestamp.setMonth(
+        newExpDateFromTimestamp.getMonth() + months
       );
       let newExpirationDate = Math.floor(
         newExpDateFromTimestamp.getTime() / 1000
@@ -149,14 +149,16 @@ export class UserService {
 
     // eslint-disable-next-line prefer-const
     let newExpDateFromTimestamp = new Date();
-
-    /*if (hours >= 24) {
-      newExpDateFromTimestamp.setDate(
-        newExpDateFromTimestamp.getDate() + Math.floor(hours / 24)
-      );
-    }*/
-    newExpDateFromTimestamp.setUTCMonth(
-      newExpDateFromTimestamp.getUTCMonth() + months
+    newExpDateFromTimestamp.setHours(
+      newExpDateFromTimestamp.getHours() + hours
+    );
+    /*newExpDateFromTimestamp.setHours(0);
+    newExpDateFromTimestamp.setMinutes(0);
+    newExpDateFromTimestamp.setSeconds(0);
+    newExpDateFromTimestamp.setMilliseconds(0);*/
+    newExpDateFromTimestamp.setDate(newExpDateFromTimestamp.getDate() + days);
+    newExpDateFromTimestamp.setMonth(
+      newExpDateFromTimestamp.getMonth() + months
     );
     let newExpirationDate = Math.floor(
       newExpDateFromTimestamp.getTime() / 1000
